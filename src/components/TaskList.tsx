@@ -29,7 +29,7 @@ const TaskList: NextPage<TaskList> = ({ titleText, tasks }) => {
       </div>
       <fieldset className="space-y-8">
         <legend className="sr-only">Notifications</legend>
-        {tasks.map(task => (
+        {tasks?.map(task => (
           <TaskItem task={task} />
         ))}
       </fieldset>

@@ -30,7 +30,7 @@ const TaskItem: NextPage<Tasks> = ({task}) => {
         </div>
         <div className="ml-3 text-md w-full flex justify-between">
           <div className="flex flex-wrap">
-            <label htmlFor="candidates" className="text-gray-700 font-normal w-3/4">
+            <label htmlFor="candidates" className="text-gray-700 font-normal w-full">
               {task.name}
             </label>
             <span className="text-gray-500 font-light text-xs">
