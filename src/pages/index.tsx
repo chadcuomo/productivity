@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { type NextPage } from "next";
 import Head from "next/head";
 import HabitItem from "../components/HabitItem";
@@ -12,81 +13,21 @@ import NotesList from "../components/NotesList";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "../utils/api";
-
-const User = {
-  user: "Chad",
-  userId: 12345,
-  Tasks: [
-    {
-      name: "Start a project",
-      id: 1,
-      date: "1/17/2023",
-      complete: false,
-      note: "hello, this is a note",
-      tag: "Work",
-      tagColor: "bg-red-100",
-      assigned: false
-    },
-    {
-      name: "Do the dishes",
-      id: 2,
-      date: "1/17/2023",
-      complete: false,
-      note: "hello, this is a note",
-      tag: "Home",
-      tagColor: "bg-blue-100",
-      assigned: false
-    },
-    {
-      name: "Meal Prep",
-      id: 3,
-      date: "1/17/2023",
-      complete: false,
-      note: "hello, this is a note",
-      tag: "Home",
-      tagColor: "bg-blue-100",
-      assigned: false
-    },
-  ],
-  Notes: [
-    {
-      name: "Meeting notes",
-      id: 1,
-      date: "1/17/2023",
-      note: "hello, this is a note",
-      tag: "Work",
-      tagColor: "bg-red-100",
-    },
-    {
-      name: "Home project notes",
-      id: 2,
-      date: "1/17/2023",
-      note: "hello, this is a note",
-      tag: "Home",
-      tagColor: "bg-blue-100",
-    },
-    {
-      name: "How to improve skills",
-      id: 3,
-      date: "1/17/2023",
-      note: "hello, this is a note",
-      tag: "Work",
-      tagColor: "bg-red-100",
-    }
-  ],
-}
+import TaskModal from "../components/TaskModal";
+import NoteModal from "../components/NoteModal";
 
 const Home: NextPage = () => {
-  const { data: tasks, isLoading } = api.task.getAll.useQuery()
+  const [taskModalOpen, setTaskModalOpen] = useState(false)
+  const [noteModalOpen, setNoteModalOpen] = useState(false)
+  const { data: notes, isLoading: isNotesLoading } = api.note.getAll.useQuery()
   const { data: session, status } = useSession();
 
   if (status === "loading") {
     return <main>Loading...</main>;
   }
 
-  console.log(tasks)
+  console.log(notes)
 
-  console.log(User)
   return (
     <div className="p-3">
       <Head>
@@ -96,21 +37,25 @@ const Home: NextPage = () => {
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
       </Head>
       <div className="max-w-screen-lg">
-        <Heading headingText={`Welcome ${User.user}`}/>
+        <Heading headingText={`Welcome ${session?.user.name}`}/>
         <div className="md:flex md:justify-between md:space-x-5">
           {session ? (
             <>
-             <TaskList titleText="Unassigned Tasks" tasks={tasks} />
-             <NotesList titleText="Note Archive" notes={User.Notes} />
-             <button onClick={() => signOut()}>
-              Logout
-            </button>
+             <TaskList titleText="Unassigned Tasks" setOpen={setTaskModalOpen} />
+             <NotesList titleText="Note Archive" notes={notes} setOpen={setNoteModalOpen} />
             </>
           ) : (
             <button onClick={() => signIn("discord")}>Login with Discord</button>
           )}
         </div>
       </div>
+      {session && (
+        <button onClick={() => signOut()}>
+        Logout
+      </button>
+      )}
+      <TaskModal open={taskModalOpen} setOpen={setTaskModalOpen} />
+      <NoteModal open={noteModalOpen} setOpen={setNoteModalOpen} />
     </div> 
   );
 };

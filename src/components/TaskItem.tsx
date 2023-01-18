@@ -37,9 +37,12 @@ const TaskItem: NextPage<Tasks> = ({task}) => {
               {task.date}
             </span>
           </div>
-          <span className={`inline-flex items-center rounded ${task.tagColor} px-2 py-0.5 text-xs font-medium text-gray-800 max-h-6`}>
-            {task.tag}
-          </span>
+          {task.tagColor && (
+            <span className={`inline-flex items-center rounded ${task.tagColor} px-2 py-0.5 text-xs font-medium text-gray-800 max-h-6`}>
+              {task.tag}
+            </span>
+          )}
+         
         </div>
       </div>
     </>
