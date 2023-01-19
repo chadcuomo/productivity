@@ -9,9 +9,6 @@ export const tagRouter = createTRPCRouter({
           name: true,
           color: true,
         },
-        orderBy: {
-          createdAt: "desc",
-        },
       });
     } catch (error) {
       console.log("error", error)

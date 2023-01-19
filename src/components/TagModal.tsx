@@ -2,7 +2,7 @@ import { Dispatch, Fragment, SetStateAction, useRef} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
 import { NextPage } from 'next'
-import NoteModalForm from './NoteModalForm'
+import TagModalForm from './TagModalForm'
 
 interface TagModal {
   open: boolean
@@ -40,8 +40,7 @@ const TagModal: NextPage<TagModal> = ({ open, setOpen }) => {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div>
-                  Select A Tag
-                  <NoteModalForm />
+                  <TagModalForm />
                 </div>
               </Dialog.Panel>
             </Transition.Child>
