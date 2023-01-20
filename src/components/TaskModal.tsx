@@ -13,6 +13,7 @@ interface TaskModal {
 const TaskModal: NextPage<TaskModal> = ({ open, setOpen }) => {
   const cancelButtonRef = useRef(null)
   const [tagModalOpen, setTagModalOpen] = useState(false)
+  const [selectedTag, setSelectedTag] = useState(null)
 
   return (
     <>
@@ -43,7 +44,7 @@ const TaskModal: NextPage<TaskModal> = ({ open, setOpen }) => {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div>
-                  <TaskModalForm setOpen={setTagModalOpen} />
+                  <TaskModalForm setOpen={setTagModalOpen} selectedTag={selectedTag} />
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -51,7 +52,7 @@ const TaskModal: NextPage<TaskModal> = ({ open, setOpen }) => {
         </div>
       </Dialog>
     </Transition.Root>
-    <TagModal open={tagModalOpen} setOpen={setTagModalOpen} />
+    <TagModal open={tagModalOpen} setOpen={setTagModalOpen} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
     </>
   )
 }

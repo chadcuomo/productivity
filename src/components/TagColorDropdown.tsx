@@ -11,7 +11,32 @@ const people = [
   {
     id: 2,
     name: 'blue',
-    color: 'bg-blue-200'
+    color: 'bg-cyan-200'
+  },
+  {
+    id: 3,
+    name: 'orange',
+    color: 'bg-orange-200'
+  },
+  {
+    id: 4,
+    name: 'yellow',
+    color: 'bg-yellow-200'
+  },
+  {
+    id: 5,
+    name: 'green',
+    color: 'bg-lime-200'
+  },
+  {
+    id: 6,
+    name: 'purple',
+    color: 'bg-purple-200'
+  },
+  {
+    id: 7,
+    name: 'gray',
+    color: 'bg-slate-200'
   },
   // More users...
 ]
@@ -41,9 +66,9 @@ export default function TagColorDropdown({ selectedColor, setSelectedColor, setT
     <Combobox as="div" value={selectedColor} onChange={setSelectedColor}>
       <div className="relative">
         <Combobox.Input
-          className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+          className={`w-full rounded-md border border-gray-300 ${selectedColor ? selectedColor.color : 'bg-white'} py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm`}
           onChange={(event) => setQuery(event.target.value)}
-          displayValue={(person) => person?.name}
+          displayValue={''}
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
           <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -64,9 +89,9 @@ export default function TagColorDropdown({ selectedColor, setSelectedColor, setT
               >
                 {({ active, selected }) => (
                   <>
-                    <div className="flex items-center">
+                    <div className="flex items-center justify-center">
                       <div className={`h-6 w-6 flex-shrink-0 rounded-full ${person.color}`} />
-                      <span className={classNames('ml-3 truncate', selected && 'font-semibold')}>{person.name}</span>
+                      {/* <span className={classNames('ml-3 truncate', selected && 'font-semibold')}>{person.name}</span> */}
                     </div>
 
                     {selected && (

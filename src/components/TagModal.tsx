@@ -9,8 +9,10 @@ interface TagModal {
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const TagModal: NextPage<TagModal> = ({ open, setOpen }) => {
+const TagModal: NextPage<TagModal> = ({ open, setOpen, selectedTag, setSelectedTag }) => {
   const cancelButtonRef = useRef(null)
+
+  console.log(open)
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -38,9 +40,9 @@ const TagModal: NextPage<TagModal> = ({ open, setOpen }) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xs sm:p-6">
                 <div>
-                  <TagModalForm />
+                  <TagModalForm selectedTag={selectedTag} setSelectedTag={setSelectedTag} setOpen={setOpen} />
                 </div>
               </Dialog.Panel>
             </Transition.Child>
