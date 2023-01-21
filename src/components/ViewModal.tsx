@@ -11,7 +11,7 @@ interface ViewModal {
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const ViewModal: NextPage<ViewModal> = ({ open, setOpen, task, isTask }) => {
+const ViewModal: NextPage<ViewModal> = ({ open, setOpen, task, isTask, deleteItem }) => {
   const cancelButtonRef = useRef(null)
   const [tagModalOpen, setTagModalOpen] = useState(false)
   const [selectedTag, setSelectedTag] = useState(null)
@@ -45,7 +45,7 @@ const ViewModal: NextPage<ViewModal> = ({ open, setOpen, task, isTask }) => {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md sm:p-6">
                 <div>
-                  <ViewModalForm setOpen={setTagModalOpen} selectedTag={selectedTag} task={task} isTask={isTask} />
+                  <ViewModalForm setOpen={setTagModalOpen} selectedTag={selectedTag} task={task} isTask={isTask} deleteItem={deleteItem} />
                 </div>
               </Dialog.Panel>
             </Transition.Child>

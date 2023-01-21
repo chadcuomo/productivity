@@ -3,7 +3,7 @@ import { useState } from "react";
 import { api } from "../utils/api";
 import { CalendarDaysIcon, TagIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-const ViewModalForm: NextPage = ({ setOpen, selectedTag, task, isTask }) => {
+const ViewModalForm: NextPage = ({ setOpen, selectedTag, task, isTask, deleteItem }) => {
   // const [task, setTask] = useState("");
   const [note, setNote] = useState("");
   const [tag, setTag] = useState("");
@@ -15,19 +15,6 @@ const ViewModalForm: NextPage = ({ setOpen, selectedTag, task, isTask }) => {
     <>
     <form
       className="flex flex-wrap gap-2 pt-4"
-      onSubmit={(event) => {
-        event.preventDefault();
-        createTask.mutate({
-          name: task,
-          note,
-          tag: selectedTag.tag,
-          tagColor: selectedTag.tagColor,
-        });
-        setTask("");
-        setNote("");
-        setTag("");
-        setTagColor("");
-      }}
     >
        <div className="relative flex items-center w-full" key={task.id}>
         {isTask &&(
@@ -68,9 +55,8 @@ const ViewModalForm: NextPage = ({ setOpen, selectedTag, task, isTask }) => {
       )}
       <div className="flex w-full gap-3 justify-end pt-5">
         {isTask && <CalendarDaysIcon className="w-5"/>}
-        <TrashIcon className="w-5" />
+        <TrashIcon className="w-5" onClick={() => deleteItem(task.id)} />
         <button
-          type="submit"
           className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           Save

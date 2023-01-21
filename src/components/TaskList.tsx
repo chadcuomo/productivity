@@ -38,8 +38,9 @@ const TaskList: NextPage<TaskList> = ({ titleText, setOpen }) => {
       <fieldset className="space-y-8">
         <legend className="sr-only">Notifications</legend>
         {tasks ? tasks.map(task => (
+          !task.complete && (
           <TaskItem task={task} />
-        )) :
+        ))) :
         (
           <div>Add a task</div>
         )

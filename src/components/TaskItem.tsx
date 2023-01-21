@@ -3,6 +3,7 @@ import { useState } from "react";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
 
 import ViewModal from "./ViewModal";
+import { api } from "../utils/api";
 
 interface Tasks {
   task: Task
@@ -21,6 +22,15 @@ interface Task {
 
 const TaskItem: NextPage<Tasks> = ({task}) => {
   const [taskModalOpen, setTaskModalOpen] = useState(false)
+  const updateTask = api.task.updateTask.useMutation();
+  const deleteTask = api.task.deleteTask.useMutation();
+
+  const deleteTaskFunction = (id) => {
+    deleteTask.mutate({
+      id: id
+    })
+  }
+  
   return (
     <>
      <div className="relative flex items-center" key={task.id}>
@@ -31,6 +41,12 @@ const TaskItem: NextPage<Tasks> = ({task}) => {
             name="candidates"
             type="checkbox"
             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            onChange={() => {
+              updateTask.mutate({
+                id: task.id,
+                complete: true
+              })
+            }}
           />
         </div>
         <div className="ml-3 text-md w-full flex justify-between" >
@@ -52,7 +68,7 @@ const TaskItem: NextPage<Tasks> = ({task}) => {
          
         </div>
       </div>
-      <ViewModal open={taskModalOpen} setOpen={setTaskModalOpen} task={task} isTask />
+      <ViewModal open={taskModalOpen} setOpen={setTaskModalOpen} task={task} isTask deleteItem={deleteTaskFunction} />
     </>
   );
 };

@@ -1,5 +1,6 @@
 import { type NextPage } from "next";
 import { useState } from "react";
+import { api } from "../utils/api";
 import ViewModal from "./ViewModal";
 
 interface Notes {
@@ -17,6 +18,14 @@ interface Note {
 
 const NoteItem: NextPage<Notes> = ({ note }) => {
   const [taskModalOpen, setTaskModalOpen] = useState(false)
+  const deleteNote = api.note.deleteNote.useMutation();
+
+  const deleteNoteFunction = (id) => {
+    deleteNote.mutate({
+      id: id
+    })
+  }
+
   return (
     <>
      <div className="relative flex flex-wrap items-center pb-12" key={note.id} onClick={() => setTaskModalOpen(true)}>
@@ -37,7 +46,7 @@ const NoteItem: NextPage<Notes> = ({ note }) => {
           </span>
         </div>
       </div>
-      <ViewModal open={taskModalOpen} setOpen={setTaskModalOpen} task={note} />
+      <ViewModal open={taskModalOpen} setOpen={setTaskModalOpen} task={note} deleteItem={deleteNoteFunction} />
     </>
   );
 };
