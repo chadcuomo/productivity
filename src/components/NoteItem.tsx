@@ -1,4 +1,6 @@
 import { type NextPage } from "next";
+import { useState } from "react";
+import ViewModal from "./ViewModal";
 
 interface Notes {
   note: Note
@@ -14,9 +16,10 @@ interface Note {
 }
 
 const NoteItem: NextPage<Notes> = ({ note }) => {
+  const [taskModalOpen, setTaskModalOpen] = useState(false)
   return (
     <>
-     <div className="relative flex flex-wrap items-center pb-12" key={note.id}>
+     <div className="relative flex flex-wrap items-center pb-12" key={note.id} onClick={() => setTaskModalOpen(true)}>
         <div className="text-md w-full flex justify-between">
           <label htmlFor="candidates" className="text-gray-700 font-normal">
             {note.name}
@@ -34,6 +37,7 @@ const NoteItem: NextPage<Notes> = ({ note }) => {
           </span>
         </div>
       </div>
+      <ViewModal open={taskModalOpen} setOpen={setTaskModalOpen} task={note} />
     </>
   );
 };

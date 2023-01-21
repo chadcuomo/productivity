@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import { useState } from "react";
 import { api } from "../utils/api";
 
-const NoteModalForm: NextPage = () => {
+const NoteModalForm: NextPage = ({ setOpen, selectedTag}) => {
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
   const [tag, setTag] = useState("");
@@ -21,8 +21,8 @@ const NoteModalForm: NextPage = () => {
         createTask.mutate({
           name: title,
           note,
-          tag,
-          tagColor,
+          tag: selectedTag.tag,
+          tagColor: selectedTag.tagColor,
         });
         setTitle("");
         setNote("");
@@ -49,9 +49,9 @@ const NoteModalForm: NextPage = () => {
         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
       />
       <div className="flex w-full gap-3 justify-end">
-        <TagIcon className="w-5" />
+        <TagIcon className="w-5" onClick={() => setOpen(true)} />
         <button
-          type="button"
+          type="submit"
           className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           Save

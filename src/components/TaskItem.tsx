@@ -1,4 +1,8 @@
 import { type NextPage } from "next";
+import { useState } from "react";
+import { DocumentTextIcon } from "@heroicons/react/24/outline";
+
+import ViewModal from "./ViewModal";
 
 interface Tasks {
   task: Task
@@ -16,6 +20,7 @@ interface Task {
 }
 
 const TaskItem: NextPage<Tasks> = ({task}) => {
+  const [taskModalOpen, setTaskModalOpen] = useState(false)
   return (
     <>
      <div className="relative flex items-center" key={task.id}>
@@ -28,14 +33,16 @@ const TaskItem: NextPage<Tasks> = ({task}) => {
             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
           />
         </div>
-        <div className="ml-3 text-md w-full flex justify-between">
+        <div className="ml-3 text-md w-full flex justify-between" >
           <div className="flex flex-wrap">
-            <label htmlFor="candidates" className="text-gray-700 font-normal w-full">
+            <span className="text-gray-700 font-normal w-full flex gap-2" onClick={() => setTaskModalOpen(true)}>
               {task.name}
-            </label>
+              {task.note && <DocumentTextIcon className="w-3.5" />}
+            </span>
             <span className="text-gray-500 font-light text-xs">
               {task.date}
             </span>
+            
           </div>
           {task.tagColor && (
             <span className={`inline-flex items-center rounded ${task.tagColor} px-2 py-0.5 text-xs font-medium text-gray-800 max-h-6`}>
@@ -45,6 +52,7 @@ const TaskItem: NextPage<Tasks> = ({task}) => {
          
         </div>
       </div>
+      <ViewModal open={taskModalOpen} setOpen={setTaskModalOpen} task={task} isTask />
     </>
   );
 };

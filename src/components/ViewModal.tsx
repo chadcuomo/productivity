@@ -4,13 +4,14 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 import { NextPage } from 'next'
 import NoteModalForm from './NoteModalForm'
 import TagModal from './TagModal'
+import ViewModalForm from './ViewModalForm'
 
-interface NoteModal {
+interface ViewModal {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const NoteModal: NextPage<NoteModal> = ({ open, setOpen }) => {
+const ViewModal: NextPage<ViewModal> = ({ open, setOpen, task, isTask }) => {
   const cancelButtonRef = useRef(null)
   const [tagModalOpen, setTagModalOpen] = useState(false)
   const [selectedTag, setSelectedTag] = useState(null)
@@ -42,9 +43,9 @@ const NoteModal: NextPage<NoteModal> = ({ open, setOpen }) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md sm:p-6">
                 <div>
-                  <NoteModalForm setOpen={setTagModalOpen} selectedTag={selectedTag} />
+                  <ViewModalForm setOpen={setTagModalOpen} selectedTag={selectedTag} task={task} isTask={isTask} />
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -57,4 +58,4 @@ const NoteModal: NextPage<NoteModal> = ({ open, setOpen }) => {
   )
 }
 
-export default NoteModal;
+export default ViewModal;
