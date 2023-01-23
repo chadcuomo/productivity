@@ -11,6 +11,7 @@ const TagModalForm: NextPage = ({selectedTag, setSelectedTag, setOpen}) => {
   const [tag, setTag] = useState("");
   const [tagColor, setTagColor] = useState("");
   const [selectedColor, setSelectedColor] = useState(null)
+  const utils = api.useContext();
 
   const { data: tags, isLoading: isTagsLoading } = api.tag.getAll.useQuery()
 
@@ -20,7 +21,11 @@ const TagModalForm: NextPage = ({selectedTag, setSelectedTag, setOpen}) => {
 
   console.log('selectedTag', selectedTag)
 
-  const createTag = api.tag.createTag.useMutation();
+  const createTag = api.tag.createTag.useMutation({
+    onSuccess() {
+      utils.tag.getAll.invalidate()
+    }
+  });
 
   return (
     <>

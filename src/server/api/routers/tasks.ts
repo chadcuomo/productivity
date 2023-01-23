@@ -2,9 +2,39 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const taskRouter = createTRPCRouter({
-  getAll: protectedProcedure.query(async ({ ctx }) => {
+  getUnassigned: protectedProcedure.query(async ({ ctx }) => {
     try {
       return await ctx.prisma.task.findMany({
+        where: {
+          complete: false,
+          assigned: false,
+        },
+        select: {
+          name: true,
+          id: true,
+          createdAt: true,
+          date: true,
+          note: true,
+          tag: true,
+          tagColor: true,
+          complete: true,
+          assigned: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } catch (error) {
+      console.log("error", error)
+    }
+  }),
+  getAssigned: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      return await ctx.prisma.task.findMany({
+        where: {
+          complete: false,
+          assigned: true,
+        },
         select: {
           name: true,
           id: true,
@@ -51,7 +81,8 @@ export const taskRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        complete: z.boolean()
+        complete: z.boolean(),
+        assigned: z.boolean()
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -61,7 +92,8 @@ export const taskRouter = createTRPCRouter({
             id: input.id
           },
           data: {
-           complete: input.complete
+           complete: input.complete,
+           assigned: input.assigned
           },
         });
       } catch (error) {

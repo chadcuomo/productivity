@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import { useState } from "react";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
+import { useQueryClient } from '@tanstack/react-query';
 
 import ViewModal from "./ViewModal";
 import { api } from "../utils/api";
@@ -22,13 +23,27 @@ interface Task {
 
 const TaskItem: NextPage<Tasks> = ({task}) => {
   const [taskModalOpen, setTaskModalOpen] = useState(false)
-  const updateTask = api.task.updateTask.useMutation();
-  const deleteTask = api.task.deleteTask.useMutation();
+  const utils = api.useContext();
+  const updateTask = api.task.updateTask.useMutation({
+    onSuccess() {
+      utils.task.getUnassigned.invalidate()
+      utils.task.getAssigned.invalidate()
+    }
+  });
+  const deleteTask = api.task.deleteTask.useMutation({
+    onSuccess() {
+      utils.task.getUnassigned.invalidate()
+      utils.task.getAssigned.invalidate()
+    }
+  });
 
   const deleteTaskFunction = (id) => {
     deleteTask.mutate({
       id: id
     })
+    setTaskModalOpen(false)
+    utils.task.getUnassigned.invalidate()
+    utils.task.getAssigned.invalidate()
   }
   
   return (
@@ -44,7 +59,8 @@ const TaskItem: NextPage<Tasks> = ({task}) => {
             onChange={() => {
               updateTask.mutate({
                 id: task.id,
-                complete: true
+                complete: true,
+                assigned: false
               })
             }}
           />

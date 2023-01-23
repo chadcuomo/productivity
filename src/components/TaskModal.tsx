@@ -44,7 +44,7 @@ const TaskModal: NextPage<TaskModal> = ({ open, setOpen }) => {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div>
-                  <TaskModalForm setOpen={setTagModalOpen} selectedTag={selectedTag} />
+                  <TaskModalForm setOpen={setTagModalOpen} setTaskModalOpen={setOpen} selectedTag={selectedTag} />
                 </div>
               </Dialog.Panel>
             </Transition.Child>

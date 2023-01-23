@@ -3,13 +3,18 @@ import { NextPage } from "next";
 import { useState } from "react";
 import { api } from "../utils/api";
 
-const NoteModalForm: NextPage = ({ setOpen, selectedTag}) => {
+const NoteModalForm: NextPage = ({ setOpen, selectedTag, setNoteModalOpen}) => {
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
   const [tag, setTag] = useState("");
   const [tagColor, setTagColor] = useState("");
+  const utils = api.useContext();
 
-  const createTask = api.note.createNote.useMutation();
+  const createTask = api.note.createNote.useMutation({
+    onSuccess() {
+      utils.note.getAll.invalidate()
+    }
+  });
 
   return (
     <>
@@ -28,6 +33,7 @@ const NoteModalForm: NextPage = ({ setOpen, selectedTag}) => {
         setNote("");
         setTag("");
         setTagColor("");
+        setNoteModalOpen(false)
       }}
     >
       <input
@@ -57,6 +63,7 @@ const NoteModalForm: NextPage = ({ setOpen, selectedTag}) => {
           Save
         </button>
         <button
+          onClick={() => setNoteModalOpen(false)}
           type="button"
           className="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >

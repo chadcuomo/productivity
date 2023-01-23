@@ -8,25 +8,20 @@ import { api } from "../utils/api";
 interface TaskList {
   titleText: string
   setOpen: Dispatch<SetStateAction<boolean>>
+  tasks: Task[]
 }
 
-// interface Task {
-//   assigned: boolean
-//   complete: boolean
-//   date: string
-//   id: number
-//   name: string
-//   note: string
-//   tag: string
-//   tagColor: string
-// } 
-const TaskList: NextPage<TaskList> = ({ titleText, setOpen }) => {
-  const { data: tasks, isLoading } = api.task.getAll.useQuery()
-  
-  if (isLoading) {
-    return <h1>Loading...</h1>
-  }
-
+interface Task {
+  assigned: boolean
+  complete: boolean
+  date: string
+  id: number
+  name: string
+  note: string
+  tag: string
+  tagColor: string
+} 
+const TaskList: NextPage<TaskList> = ({ titleText, setOpen, tasks }) => {
   return (
     <div className="mt-4 bg-white rounded-lg px-8 py-8 md:w-1/2">
       <div className="flex justify-between">

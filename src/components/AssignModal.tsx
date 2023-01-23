@@ -5,16 +5,24 @@ import { NextPage } from 'next'
 import NoteModalForm from './NoteModalForm'
 import TagModal from './TagModal'
 import ViewModalForm from './ViewModalForm'
+import { api } from '../utils/api'
 
-interface ViewModal {
+interface AssignModal {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const ViewModal: NextPage<ViewModal> = ({ open, setOpen, task, isTask, deleteItem }) => {
+const AssignModal: NextPage<AssignModal> = ({ open, setOpen, setViewOpen, task }) => {
   const cancelButtonRef = useRef(null)
-  const [tagModalOpen, setTagModalOpen] = useState(false)
-  const [selectedTag, setSelectedTag] = useState(null)
+  const utils = api.useContext();
+  const updateTask = api.task.updateTask.useMutation({
+    onSuccess() {
+      utils.task.getUnassigned.invalidate()
+      utils.task.getAssigned.invalidate()
+      setOpen(false)
+      setViewOpen(false)
+    }
+  });
 
   return (
     <>
@@ -43,9 +51,28 @@ const ViewModal: NextPage<ViewModal> = ({ open, setOpen, task, isTask, deleteIte
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md sm:p-6">
-                <div>
-                  <ViewModalForm setOpen={setOpen} selectedTag={selectedTag} task={task} isTask={isTask} deleteItem={deleteItem} />
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xs sm:p-6">
+                <div className="flex gap-5 flex-wrap justify-center">
+                  <h1 className='w-full text-center'>Move to daily task list?</h1>
+                  <button
+                    onClick={() => {
+                      updateTask.mutate({
+                        id: task.id,
+                        complete: false,
+                        assigned: true
+                      })
+                    }}
+                    type="button"
+                    className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Confirm
+                  </button>
+                  <button
+                  type="button"
+                  className="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Cancel
+                  </button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -53,9 +80,8 @@ const ViewModal: NextPage<ViewModal> = ({ open, setOpen, task, isTask, deleteIte
         </div>
       </Dialog>
     </Transition.Root>
-    <TagModal open={tagModalOpen} setOpen={setTagModalOpen} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
     </>
   )
 }
 
-export default ViewModal;
+export default AssignModal;

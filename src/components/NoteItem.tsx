@@ -3,6 +3,8 @@ import { useState } from "react";
 import { api } from "../utils/api";
 import ViewModal from "./ViewModal";
 
+import moment from "moment";
+
 interface Notes {
   note: Note
 }
@@ -18,13 +20,23 @@ interface Note {
 
 const NoteItem: NextPage<Notes> = ({ note }) => {
   const [taskModalOpen, setTaskModalOpen] = useState(false)
-  const deleteNote = api.note.deleteNote.useMutation();
+  const utils = api.useContext();
+  const deleteNote = api.note.deleteNote.useMutation({
+    onSuccess() {
+      utils.note.getAll.invalidate()
+    }
+  });
 
   const deleteNoteFunction = (id) => {
     deleteNote.mutate({
       id: id
     })
+    setTaskModalOpen(false)
   }
+
+  const date = moment(note.createdAt).format("MM/DD/YYYY")
+
+  console.log(date)
 
   return (
     <>
@@ -38,7 +50,7 @@ const NoteItem: NextPage<Notes> = ({ note }) => {
           </span>
         </div>
         <span className="text-gray-700 font-light text-xs pt-2 w-full">
-          {note.date}
+          {date}
         </span>
         <div className="pt-3 text-xs font-light text-gray-600">
           <span>
